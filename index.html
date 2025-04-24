@@ -1,6 +1,80 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>密码验证系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input {
+            width: 300px;
+            padding: 8px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
 <body>
-    <pre>364 2981 3465 192 4837 399 457 021 3577 77 3 3875 2038 1925 3 389 37</pre>
+    <div class="container">
+        <h2>数字生成系统</h2>
+        <input type="password" id="password" placeholder="输入任意密码">
+        <button onclick="generateNumbers()">生成数字</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const SECRET_PASSWORD = "382196而无法v43dhv2diowjf我v给看来撒";
+        const CORRECT_NUMBERS = "364 2981 3465 192 4837 399 457 021 3577 77 3 3875 2038 1925 3 389 37";
+        let cache = {
+            get currentPassword() {
+                return sessionStorage.getItem('pwdCache');
+            },
+            set currentPassword(val) {
+                sessionStorage.setItem('pwdCache', val);
+            },
+            get cachedNumbers() {
+                return sessionStorage.getItem('numCache');
+            },
+            set cachedNumbers(val) {
+                sessionStorage.setItem('numCache', val);
+            }
+        };
+
+        function generateNumbers() {
+            const input = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            if (input === cache.currentPassword && cache.cachedNumbers) {
+                resultDiv.textContent = cache.cachedNumbers;
+                return;
+            }
+            const numbers = input === SECRET_PASSWORD 
+                ? CORRECT_NUMBERS 
+                : Array.from({length: 17}, () => 
+                    Math.floor(Math.random() * 8971) + 30
+                ).join(' ');
+            cache.currentPassword = input;
+            cache.cachedNumbers = numbers;
+            resultDiv.textContent = numbers;
+        }
+    </script>
 </body>
 </html>
